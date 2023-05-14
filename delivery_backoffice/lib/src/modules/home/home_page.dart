@@ -14,45 +14,28 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> with Loader, Messages {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Home Page'),
-      ),
-      body: Center(
-        child: SizedBox(
-          width: context.percentWidth(.5),
-          height: context.percentHeight(.9),
-          // color: context.colors.secondary,
-          child: Column(
-            children: [
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Form(
-                  autovalidateMode: AutovalidateMode.always,
-                  child: TextFormField(
-                    decoration: const InputDecoration(label: Text('Login')),
-                    validator: (value) => 'Erro',
-                  ),
-                ),
+    return SizedBox(
+      width: context.percentWidth(.5),
+      height: context.percentHeight(.9),
+      child: Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Form(
+              autovalidateMode: AutovalidateMode.always,
+              child: TextFormField(
+                decoration: const InputDecoration(label: Text('Login')),
+                validator: (value) => 'Erro',
               ),
-              Center(
-                child: ElevatedButton(
-                  onPressed: () {},
-                  child: const Text('Botão'),
-                ),
-              ),
-            ],
+            ),
           ),
-        ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () async {
-          showLoader();
-          await Future.delayed(const Duration(seconds: 2));
-          hideLoader();
-          showError('Erro de alguma coisa');
-        },
-        child: const Text('Clique'),
+          Center(
+            child: ElevatedButton(
+              onPressed: () {},
+              child: const Text('Botão'),
+            ),
+          ),
+        ],
       ),
     );
   }

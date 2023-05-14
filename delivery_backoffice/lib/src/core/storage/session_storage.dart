@@ -1,7 +1,7 @@
 import 'dart:html';
 import 'storage.dart';
 
-class SessionStorageImpl implements Storage {
+class SessionStorage implements Storage {
   @override
   String getData(String key) => window.sessionStorage[key] ?? '';
 
