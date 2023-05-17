@@ -1,8 +1,11 @@
 import 'package:flutter_modular/flutter_modular.dart';
 
+import '../../core/repositories/payment_type/payment_type_repository.dart';
+import '../../core/repositories/payment_type/payment_type_repository_impl.dart';
 import '../../core/rest_client/custom_dio.dart';
 import '../../core/storage/session_storage.dart';
 import '../../core/storage/storage.dart';
+import '../payment_type/payment_type_controller.dart';
 
 class CoreModule extends Module {
   @override
@@ -12,5 +15,10 @@ class CoreModule extends Module {
           export: true,
         ),
         Bind.lazySingleton((i) => CustomDio(i()), export: true),
+        Bind.lazySingleton<PaymentTypeRepository>(
+          (i) => PaymentTypeRepositoryImpl(i()),
+          export: true,
+        ),
+        Bind.lazySingleton((i) => PaymentTypeController(i()), export: true)
       ];
 }
