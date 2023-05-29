@@ -4,6 +4,7 @@ import 'package:mobx/mobx.dart';
 
 import '../../../core/repositories/product/product_repository.dart';
 import '../../../models/product_model.dart';
+
 part 'products_controller.g.dart';
 
 enum ProductStateStatus {
@@ -11,6 +12,7 @@ enum ProductStateStatus {
   loading,
   loaded,
   error,
+  addOrUpdateProduct,
 }
 
 class ProductsController = ProductsControllerBase with _$ProductsController;
@@ -29,6 +31,9 @@ abstract class ProductsControllerBase with Store {
   @readonly
   String? _filterName;
 
+  @readonly
+  ProductModel? _productSelected;
+
   @action
   Future<void> filterByName(String name) async {
     _filterName = name;
@@ -41,9 +46,25 @@ abstract class ProductsControllerBase with Store {
       _status = ProductStateStatus.loading;
       _products = await _productRepository.findAll(_filterName);
       _status = ProductStateStatus.loaded;
-    } catch (e, s) {
-      log('Erro ao buscar productos', error: e, stackTrace: s);
+    } on Exception catch (e, s) {
+      log(e.toString(), error: e, stackTrace: s);
       _status = ProductStateStatus.error;
     }
+  }
+
+  @action
+  Future<void> addProduct() async {
+    _status = ProductStateStatus.loading;
+    await Future.delayed(Duration.zero);
+    _productSelected = null;
+    _status = ProductStateStatus.addOrUpdateProduct;
+  }
+
+  @action
+  Future<void> editProduct(ProductModel productModel) async {
+    _status = ProductStateStatus.loading;
+    await Future.delayed(Duration.zero);
+    _productSelected = productModel;
+    _status = ProductStateStatus.addOrUpdateProduct;
   }
 }

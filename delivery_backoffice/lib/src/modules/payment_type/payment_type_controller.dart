@@ -47,8 +47,8 @@ abstract class PaymentTypeControllerBase with Store {
       _status = PaymentTypeStateStatus.loading;
       _paymentTypes = await _paymentTypeRepository.findAll(_filterEnabled);
       _status = PaymentTypeStateStatus.loaded;
-    } catch (e, s) {
-      log('Erro ao carregar as formas de pagamento', error: e, stackTrace: s);
+    } on Exception catch (e, s) {
+      log(e.toString(), error: e, stackTrace: s);
       _errorMessage = 'Erro ao carregar as formas de pagamento';
       _status = PaymentTypeStateStatus.error;
     }
@@ -85,7 +85,13 @@ abstract class PaymentTypeControllerBase with Store {
       enabled: enabled,
     );
 
-    await _paymentTypeRepository.save(paymentTypeModel);
-    _status = PaymentTypeStateStatus.saved;
+    try {
+      await _paymentTypeRepository.save(paymentTypeModel);
+      _status = PaymentTypeStateStatus.saved;
+    } on Exception catch (e, s) {
+      log(e.toString(), error: e, stackTrace: s);
+      _errorMessage = 'Erro ao salvar forma de pagamento';
+      _status = PaymentTypeStateStatus.error;
+    }
   }
 }

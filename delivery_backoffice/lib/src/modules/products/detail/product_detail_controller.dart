@@ -35,6 +35,9 @@ abstract class ProductDetailControllerBase with Store {
   @readonly
   String? _imagePath;
 
+  @readonly
+  ProductModel? _productModel;
+
   @action
   Future<void> uploadImageProduct(Uint8List file, String fileName) async {
     _status = ProductDetailStateStatus.loading;
@@ -47,18 +50,52 @@ abstract class ProductDetailControllerBase with Store {
     _status = ProductDetailStateStatus.loading;
     try {
       final productModel = ProductModel(
+        id: _productModel?.id,
         name: name,
         price: price,
         description: description,
         image: _imagePath!,
-        enabled: true,
+        enabled: _productModel?.enabled ?? true,
       );
       await _productRepository.save(productModel);
       _status = ProductDetailStateStatus.saved;
-    } catch (e, s) {
-      log('Erro ao salvar o produto', error: e, stackTrace: s);
+    } on Exception catch (e, s) {
+      log(e.toString(), error: e, stackTrace: s);
       _status = ProductDetailStateStatus.error;
       _errorMessage = 'Erro ao salvar o produto';
+    }
+  }
+
+  @action
+  Future<void> loadProduct(int? id) async {
+    _status = ProductDetailStateStatus.loading;
+    _productModel = null;
+    _imagePath = null;
+    try {
+      if (id != null) {
+        _productModel = await _productRepository.getProduct(id);
+        _imagePath = _productModel!.image;
+      }
+      _status = ProductDetailStateStatus.loaded;
+    } on Exception catch (e, s) {
+      log(e.toString(), error: e, stackTrace: s);
+      _status = ProductDetailStateStatus.errorLoadProduct;
+      _errorMessage = 'Erro ao carregar produto';
+    }
+  }
+
+  @action
+  Future<void> deleteProduct() async {
+    _status = ProductDetailStateStatus.loading;
+    try {
+      if (_productModel != null && _productModel!.id != null) {
+        await _productRepository.deleteProduct(_productModel!.id!);
+      }
+      _status = ProductDetailStateStatus.deleted;
+    } on Exception catch (e, s) {
+      log(e.toString(), error: e, stackTrace: s);
+      _status = ProductDetailStateStatus.error;
+      _errorMessage = 'Erro ao deletar produto';
     }
   }
 }

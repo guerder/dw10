@@ -2,10 +2,10 @@ import 'dart:developer';
 
 import 'package:dio/dio.dart';
 
+import '../../../models/auth_model.dart';
 import '../../exceptions/repository_exception.dart';
 import '../../exceptions/unauthorized_exception.dart';
 import '../../rest_client/custom_dio.dart';
-import '../../../models/auth_model.dart';
 import 'auth_repository.dart';
 
 class AuthRepositoryImpl implements AuthRepository {
@@ -21,8 +21,8 @@ class AuthRepositoryImpl implements AuthRepository {
       );
 
       return AuthModel.fromMap(result.data);
-    } on DioError catch (e, s) {
-      if (e.response?.statusCode == 403) {
+    } catch (e, s) {
+      if (e is DioError && e.response?.statusCode == 403) {
         log('Login ou senha inválidos', error: e, stackTrace: s);
         throw UnauthorizedException();
       }

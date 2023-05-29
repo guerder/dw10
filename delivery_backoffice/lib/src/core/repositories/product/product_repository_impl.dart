@@ -1,10 +1,9 @@
 import 'dart:developer';
+import 'dart:typed_data';
 
 import 'package:dio/dio.dart';
 
 import '../../../models/product_model.dart';
-import 'dart:typed_data';
-
 import '../../exceptions/repository_exception.dart';
 import '../../rest_client/custom_dio.dart';
 import 'product_repository.dart';
@@ -17,8 +16,8 @@ class ProductRepositoryImpl implements ProductRepository {
   @override
   Future<void> deleteProduct(int id) async {
     try {
-      await _dio.auth().put('/products/$id', data: {'enabled', false});
-    } on DioError catch (e, s) {
+      await _dio.auth().put('/products/$id', data: {'enabled': false});
+    } catch (e, s) {
       log('Erro ao deletar produto', error: e, stackTrace: s);
       throw RepositoryException(message: 'Erro ao deletar produto');
     }
@@ -37,7 +36,7 @@ class ProductRepositoryImpl implements ProductRepository {
       return (productsResult.data as List)
           .map((p) => ProductModel.fromMap(p))
           .toList();
-    } on DioError catch (e, s) {
+    } catch (e, s) {
       log('Erro ao buscar produtos', error: e, stackTrace: s);
       throw RepositoryException(message: 'Erro ao buscar produtos');
     }
@@ -46,9 +45,9 @@ class ProductRepositoryImpl implements ProductRepository {
   @override
   Future<ProductModel> getProduct(int id) async {
     try {
-      final productResult = await _dio.auth().get('products$id');
+      final productResult = await _dio.auth().get('/products/$id');
       return ProductModel.fromMap(productResult.data);
-    } on DioError catch (e, s) {
+    } catch (e, s) {
       log('Erro ao buscar produto', error: e, stackTrace: s);
       throw RepositoryException(message: 'Erro ao buscar produto');
     }
@@ -64,7 +63,7 @@ class ProductRepositoryImpl implements ProductRepository {
       } else {
         await client.post('/products', data: data);
       }
-    } on DioError catch (e, s) {
+    } catch (e, s) {
       log('Erro ao salvar produto', error: e, stackTrace: s);
       throw RepositoryException(message: 'Erro ao salvar produto');
     }
@@ -79,7 +78,7 @@ class ProductRepositoryImpl implements ProductRepository {
 
       final response = await _dio.auth().post('/uploads', data: formData);
       return response.data['url'] as String;
-    } on DioError catch (e, s) {
+    } catch (e, s) {
       log('Erro ao fazer upload do arquivo', error: e, stackTrace: s);
       throw RepositoryException(message: 'Erro ao fazer upload do arquivo');
     }

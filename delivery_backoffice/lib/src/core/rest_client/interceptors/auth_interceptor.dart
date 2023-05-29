@@ -21,5 +21,6 @@ class AuthInterceptor extends Interceptor {
     if (err.response?.statusCode == 401) {
       GlobalContext.instance.loginExpire();
     }
+    return handler.next(err);
   }
 }

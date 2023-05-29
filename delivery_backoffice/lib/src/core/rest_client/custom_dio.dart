@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:dio/browser.dart';
 import 'package:dio/dio.dart';
 
@@ -19,6 +21,9 @@ class CustomDio extends DioForBrowser {
       LogInterceptor(
         requestBody: true,
         responseBody: true,
+        logPrint: (obj) {
+          log(obj.toString());
+        },
       ),
     );
     _authInterceptor = AuthInterceptor(storage);
