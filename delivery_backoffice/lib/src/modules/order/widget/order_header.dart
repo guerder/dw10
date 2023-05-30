@@ -2,9 +2,12 @@ import 'package:flutter/material.dart';
 
 import '../../../core/ui/widgets/base_header.dart';
 import '../../../models/orders/order_status.dart';
+import '../order_controller.dart';
 
 class OrderHeader extends StatefulWidget {
-  const OrderHeader({Key? key}) : super(key: key);
+  final OrderController controller;
+
+  const OrderHeader({Key? key, required this.controller}) : super(key: key);
 
   @override
   State<OrderHeader> createState() => _OrderHeaderState();
@@ -33,6 +36,7 @@ class _OrderHeaderState extends State<OrderHeader> {
         onChanged: (value) {
           setState(() {
             statusSelected = value;
+            widget.controller.changeStatusFilter(value);
           });
         },
       ),

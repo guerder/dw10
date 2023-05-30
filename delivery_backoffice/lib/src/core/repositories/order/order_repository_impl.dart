@@ -13,7 +13,7 @@ class OrderRepositoryImpl implements OrderRepository {
   @override
   Future<void> changeStatus(int id, OrderStatus status) async {
     try {
-      await _dio.auth().put('/orders/$id', data: {'status', status.acronym});
+      await _dio.auth().put('/orders/$id', data: {'status': status.acronym});
     } catch (e, s) {
       log(
         'Erro ao alterar status do pedido para ${status.acronym}',

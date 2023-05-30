@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 enum OrderStatus {
   pendente('Pendente', 'P', Colors.blue),
-  confirmado('Confirmado', 'C', Colors.green),
+  confirmado('Confirmado', 'R', Colors.green),
   finalizado('Finalizado', 'F', Colors.black),
   cancelado('Cancelado', 'C', Colors.red);
 
